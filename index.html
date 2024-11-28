@@ -109,13 +109,43 @@
             border: 1px dashed #0f0;
             padding: 10px;
         }
+
+        #initial-content {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.1s ease;
+        }
+
+        #footer-content {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.1s ease;
+        }
+
+        #title-content {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.1s ease;
+        }
+
+        #deleted-files {
+            display: none;
+            margin-top: 30px;
+            color: whitesmoke;
+        }
+
+        .deleted-file {
+            font-family: monospace;
+            display: none;
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
 
-<h1>Secret Santa 2025</h1>
+<h1 id="title-content" >Secret Santa 2025</h1>
 
-<div class="write">
+<div id="initial-content" class="write">
     <p>Ciao <strong>${name}</strong>,</p>
 
     <div>
@@ -141,8 +171,13 @@
     </div>
 </div>
 
+<!-- Nuova sezione per i "file cancellati" -->
+<div id="deleted-files">
+    <!-- I file verranno aggiunti dinamicamente qui -->
+</div>
+
 <footer>
-    <div style="text-align: left">
+    <div id="footer-content" style="text-align: left">
         <div>
             <small style="font-size: 0.8em">~$ process finished with exit code 0</small>
         </div>
@@ -150,11 +185,89 @@
 
         <div>
             <small>
-                click <a href="#">here</a> to continue<span class="blink">_</span>
+                click <a href="#" id="rm-link">here</a> to continue<span class="blink">_</span>
             </small>
         </div>
     </div>
 </footer>
+
+<script>
+    document.getElementById("rm-link").addEventListener("click", function(event) {
+        event.preventDefault(); // Previene il comportamento di default del link
+        document.getElementById("initial-content").style.opacity = "0"; // Nasconde il contenuto iniziale
+        setTimeout(function() {
+            document.getElementById("initial-content").style.display = "none"; // Rimuove il contenuto iniziale
+            document.getElementById("footer-content").style.display = "none"; // Rimuove il contenuto iniziale
+            document.getElementById("title-content").style.display = "none";
+            document.getElementById("deleted-files").style.display = "block"; // Mostra i file cancellati
+            generateAndRemoveFiles(); // Avvia la generazione e la cancellazione dei file
+        }, 25); // Aspetta 1 secondo per completare la transizione
+    });
+
+    function generateAndRemoveFiles() {
+        let files = [];
+        const deletedFilesContainer = document.getElementById("deleted-files");
+
+        setInterval(function() {
+            const name = generateUbuntuFilePath(); // Add timestamp to make filenames unique
+            files.push(name);
+
+            const fileElement = document.createElement("p");
+            fileElement.className = "deleted-file";
+            fileElement.textContent = name;
+            deletedFilesContainer.appendChild(fileElement);
+            fileElement.style.display = "block";
+
+            console.log(files.length);
+            if (files.length > 25) {
+                // Remove the first file from the array
+                files.shift();
+
+                // Find and hide the first file element
+                const firstFile = deletedFilesContainer.querySelector(".deleted-file");
+                firstFile.style.display = "none";
+                deletedFilesContainer.removeChild(firstFile); // Optionally remove the element from the DOM
+            }
+        }, 25);
+    }
+
+    function generateUbuntuFilePath() {
+        // Elenco di cartelle tipiche di Ubuntu
+        const folders = [
+            '/home/user',
+            '/var/log',
+            '/etc',
+            '/usr/bin',
+            '/tmp',
+            '/opt',
+            '/home/user/Documents',
+            '/home/user/Pictures',
+            '/home/user/Music',
+            '/home/user/Downloads'
+        ];
+
+        // Funzione per generare una stringa di caratteri casuali (per il nome del file)
+        function getRandomString(length) {
+            const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        // Scegli una cartella casuale dal sistema
+        const randomFolder = folders[Math.floor(Math.random() * folders.length)];
+
+        // Aggiungi un nome di file casuale
+        const randomFileName = getRandomString(10) + '.txt'; // Nome file casuale con estensione .txt
+
+        // Crea il percorso completo
+        return `${randomFolder}/${randomFileName}`;
+    }
+
+</script>
 
 </body>
 </html>
