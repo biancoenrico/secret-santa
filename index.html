@@ -7,9 +7,9 @@
     <style>
         body {
             font-family: "Courier New", Courier, monospace;
-            background-color: #000;
+            background-color: #101010;
             color: #0f0;
-            line-height: 1.5;
+            line-height: 1.7;
             margin: 0;
             padding: 20px;
             font-size: 1.1em;
@@ -19,14 +19,15 @@
             text-align: center;
             text-transform: uppercase;
             color: #0f0;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #0f0;
+            margin-bottom: 30px;
             padding-bottom: 10px;
-            font-size: 2.5em;
+            font-size: 3em;
+            border-bottom: 2px solid #0f0;
         }
 
         p, ul, small {
             margin: 10px 0;
+            line-height: 1.6;
         }
 
         ul {
@@ -41,15 +42,15 @@
         .highlight {
             color: #f00;
             font-weight: bold;
+            font-size: 1.2em;
         }
 
         footer {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: center;
-            font-size: 1em;
+            font-size: 1.1em;
             color: #0f0;
-            border-top: 1px solid #0f0;
-            padding-top: 10px;
+            padding-top: 20px;
             font-style: italic;
         }
 
@@ -62,9 +63,9 @@
             text-decoration: underline;
         }
 
-
         .write {
             font-style: italic;
+            margin-bottom: 20px;
         }
 
         .gif-container {
@@ -73,9 +74,40 @@
         }
 
         .gif-container img {
-            max-width: 80%;
+            max-width: 90%;
             border: 2px solid #0f0;
-            border-radius: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 255, 0, 0.3);
+        }
+
+        .thank-you {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px dashed whitesmoke;
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+
+        small {
+            font-size: 0.9em;
+        }
+
+        .blink {
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .write {
+            border: 1px dashed #0f0;
+            padding: 10px;
         }
     </style>
 </head>
@@ -87,39 +119,41 @@
     <p>Ciao <strong>${name}</strong>,</p>
 
     <div>
-        <span>Come ogni anno, eccoci arrivati all’immancabile secret santa anticipato.</span>
+        <p>Come ogni anno, eccoci arrivati all’immancabile secret santa anticipato.</p>
 
-        <div>
-            <p>
-                Se non e il primo secret santa che passi con me sai gia quanto io sia una chiavica a scrivere certe cose, ma ci provo lo stesso.
-            </p>
+        <p>Se non è il primo secret santa che passi con me, sai già quanto io sia una chiavica a scrivere certe cose, ma ci provo lo stesso.</p>
 
-            <p>
-                Vorrei ringraziarti per il lavoro che fai ogni giorno, per essere tanto un collega quanto un amico con cui condividere una buona e sana spedizione punitiva e un professionista
-                capace di trovare la soluzione ad ogni situazione.
-            </p>
+        <p>Vorrei ringraziarti per il lavoro che fai ogni giorno, per essere tanto un collega quanto un amico con cui condividere una buona e sana spedizione punitiva e per essere un professionista capace di trovare la soluzione ad ogni situazione.</p>
 
-            <p>
-                Buon pranzo e ricordati di mettere la presenza su Peoplog!
-            </p>
-        </div>
-
-        <div class="gif-container">
-            <img src="https://media1.tenor.com/m/oPhEbF_IlTgAAAAd/grazie-complimenti.gif" alt="Secret Santa Gif">
-        </div>
-
-        <div class="highlight">
-            <small>
-                Per chi non la capisce, beh... mi dispiace per voi.
-            </small>
-        </div>
+        <p class="thank-you">Buon pranzo e ricordati di mettere la presenza su Peoplog!</p>
     </div>
 
+    <div class="gif-container">
+        <img src="https://media1.tenor.com/m/oPhEbF_IlTgAAAAd/grazie-complimenti.gif" alt="Secret Santa Gif">
+    </div>
+
+    <div class="highlight" style="text-align: center; font-size: 0.8em;">
+        <small>Per chi non la capisce, beh... mi dispiace per voi.</small>
+    </div>
+
+    <div style="text-align: center; margin: 20px 0;">
+        <p>Buone feste! 🎄</p>
+    </div>
 </div>
 
 <footer>
-    <p>Buone feste! 🎄</p>
-    <p>~ process finished with 0 ~</p>
+    <div style="text-align: left">
+        <div>
+            <small style="font-size: 0.8em">~$ process finished with exit code 0</small>
+        </div>
+        <div style="border-top: 1px solid whitesmoke; margin-top: 20px; margin-bottom: 10px"></div>
+
+        <div>
+            <small>
+                click <a href="#">here</a> to continue<span class="blink">_</span>
+            </small>
+        </div>
+    </div>
 </footer>
 
 </body>
