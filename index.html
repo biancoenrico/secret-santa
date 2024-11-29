@@ -130,8 +130,8 @@
 
         #deleted-files {
             display: none;
-            margin-top: 30px;
             color: whitesmoke;
+            transition: opacity 0.1s ease;
         }
 
         .deleted-file {
@@ -139,11 +139,31 @@
             display: none;
             margin: 5px 0;
         }
+
+        .highlight-last {
+            position: relative;
+            padding-right: 20px; /* Aggiungi spazio per la visualizzazione del cursore */
+        }
+
+        .highlight-last::after {
+            content: "▌";
+            display: inline; /* Permette di rimanere all'interno del flusso del paragrafo */
+            color: whitesmoke;
+            margin-left: 5px; /* Aggiungi spazio tra il testo e il simbolo */
+        }
+
+        .blink::after {
+            content: "▌";
+            display: inline; /* Permette di rimanere all'interno del flusso del paragrafo */
+            color: #0f0;
+            margin-left: 5px; /* Aggiungi spazio tra il testo e il simbolo */
+        }
+
     </style>
 </head>
 <body>
 
-<h1 id="title-content" >Secret Santa 2025</h1>
+<h1 id="title-content">Secret Santa 2025</h1>
 
 <div id="initial-content" class="write">
     <p>Ciao <strong>${name}</strong>,</p>
@@ -151,9 +171,12 @@
     <div>
         <p>Come ogni anno, eccoci arrivati all’immancabile secret santa anticipato.</p>
 
-        <p>Se non è il primo secret santa che passi con me, sai già quanto io sia una chiavica a scrivere certe cose, ma ci provo lo stesso.</p>
+        <p>Se non è il primo secret santa che passi con me, sai già quanto io sia una chiavica a scrivere certe cose, ma
+            ci provo lo stesso.</p>
 
-        <p>Vorrei ringraziarti per il lavoro che fai ogni giorno, per essere tanto un collega quanto un amico con cui condividere una buona e sana spedizione punitiva e per essere un professionista capace di trovare la soluzione ad ogni situazione.</p>
+        <p>Vorrei ringraziarti per il lavoro che fai ogni giorno, per essere tanto un collega quanto un amico con cui
+            condividere una buona e sana spedizione punitiva e per essere un professionista capace di trovare la
+            soluzione ad ogni situazione.</p>
 
         <p class="thank-you">Buon pranzo e ricordati di mettere la presenza su Peoplog!</p>
     </div>
@@ -173,7 +196,7 @@
 
 <!-- Nuova sezione per i "file cancellati" -->
 <div id="deleted-files">
-    <!-- I file verranno aggiunti dinamicamente qui -->
+
 </div>
 
 <footer>
@@ -185,31 +208,33 @@
 
         <div>
             <small>
-                click <a href="#" id="rm-link">here</a> to continue<span class="blink">_</span>
+                click <a href="#" id="rm-link">here</a> to be the best<span class="blink"></span>
             </small>
         </div>
     </div>
 </footer>
 
 <script>
-    document.getElementById("rm-link").addEventListener("click", function(event) {
-        event.preventDefault(); // Previene il comportamento di default del link
-        document.getElementById("initial-content").style.opacity = "0"; // Nasconde il contenuto iniziale
-        setTimeout(function() {
-            document.getElementById("initial-content").style.display = "none"; // Rimuove il contenuto iniziale
-            document.getElementById("footer-content").style.display = "none"; // Rimuove il contenuto iniziale
+    document.getElementById("rm-link").addEventListener("click", function (event) {
+        event.preventDefault();
+
+        document.getElementById("initial-content").style.opacity = "0";
+        setTimeout(function () {
+            document.getElementById("initial-content").style.display = "none";
+            document.getElementById("footer-content").style.display = "none";
             document.getElementById("title-content").style.display = "none";
-            document.getElementById("deleted-files").style.display = "block"; // Mostra i file cancellati
-            generateAndRemoveFiles(); // Avvia la generazione e la cancellazione dei file
-        }, 25); // Aspetta 1 secondo per completare la transizione
+
+            document.getElementById("deleted-files").style.display = "block";
+            generateAndRemoveFiles();
+        }, 25);
     });
 
     function generateAndRemoveFiles() {
         let files = [];
         const deletedFilesContainer = document.getElementById("deleted-files");
 
-        setInterval(function() {
-            const name = generateUbuntuFilePath(); // Add timestamp to make filenames unique
+        const x = setInterval(function () {
+            const name = generateUbuntuFilePath();
             files.push(name);
 
             const fileElement = document.createElement("p");
@@ -218,55 +243,38 @@
             deletedFilesContainer.appendChild(fileElement);
             fileElement.style.display = "block";
 
-            console.log(files.length);
-            if (files.length > 25) {
-                // Remove the first file from the array
-                files.shift();
+            updateLastChildStyle();
 
-                // Find and hide the first file element
+            if (files.length > 25) {
+                files.shift();
                 const firstFile = deletedFilesContainer.querySelector(".deleted-file");
-                firstFile.style.display = "none";
-                deletedFilesContainer.removeChild(firstFile); // Optionally remove the element from the DOM
+                if (firstFile) firstFile.remove();
             }
         }, 25);
     }
 
-    function generateUbuntuFilePath() {
-        // Elenco di cartelle tipiche di Ubuntu
-        const folders = [
-            '/home/user',
-            '/var/log',
-            '/etc',
-            '/usr/bin',
-            '/tmp',
-            '/opt',
-            '/home/user/Documents',
-            '/home/user/Pictures',
-            '/home/user/Music',
-            '/home/user/Downloads'
-        ];
+    function updateLastChildStyle() {
+        const deletedFilesContainer = document.getElementById("deleted-files");
 
-        // Funzione per generare una stringa di caratteri casuali (per il nome del file)
-        function getRandomString(length) {
-            const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = '';
-            const charactersLength = characters.length;
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            return result;
+        // Rimuovi la classe highlight-last da tutti i paragrafi
+        const allParagraphs = deletedFilesContainer.querySelectorAll("p");
+        allParagraphs.forEach(paragraph => {
+            paragraph.classList.remove("highlight-last");
+        });
+
+        // Applica la classe highlight-last solo all'ultimo paragrafo
+        const lastParagraph = deletedFilesContainer.querySelector("p:last-child");
+        if (lastParagraph) {
+            lastParagraph.classList.add("highlight-last");
         }
-
-        // Scegli una cartella casuale dal sistema
-        const randomFolder = folders[Math.floor(Math.random() * folders.length)];
-
-        // Aggiungi un nome di file casuale
-        const randomFileName = getRandomString(10) + '.txt'; // Nome file casuale con estensione .txt
-
-        // Crea il percorso completo
-        return `${randomFolder}/${randomFileName}`;
     }
 
+    function generateUbuntuFilePath() {
+        const folders = ['/home/user/Desktop', '/home/user/Documents', '/etc/systemd/system', '/var/log/system', '/srv/www'];
+        const randomFolder = folders[Math.floor(Math.random() * folders.length)];
+        const randomFileName = Math.random().toString(36).substring(2, 12) + '.txt';
+        return `${randomFolder}/${randomFileName}`;
+    }
 </script>
 
 </body>
